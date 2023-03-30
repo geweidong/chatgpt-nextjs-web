@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google'
 
 
 export default function Home() {
-  // const { font } = props;
+  const { font } = props;
   return (
     <>
       <Head>
