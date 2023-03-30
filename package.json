@@ -11,6 +11,7 @@
     "test": "echo \"test done\""
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.3",
     "antd": "^5.3.3",
     "next": "13.2.4",
     "openai": "^3.2.1",
