@@ -30,9 +30,51 @@ export const chatSlice = createSlice({
       state.chat.unshift({ uuid: history.uuid, data: chatData })
       state.active = history.uuid
     },
+    updateChatByUuid: (state, action: PayloadAction<{ uuid: number; index: number; chat: Chat.Chat }>) => {
+      const { payload } = action
+      const { uuid, index, chat } = payload
+      if (!uuid || uuid === 0) {
+        if (state.chat.length) {
+          state.chat[0].data[index] = chat
+        }
+        return
+      }
+
+      const chatIndex = state.chat.findIndex(item => item.uuid === uuid)
+      if (chatIndex !== -1) {
+        state.chat[chatIndex].data[index] = chat
+      }
+    },
+    updateChatSomeByUuid: (state, action: PayloadAction<{ uuid: number; index: number; chat: Partial<Chat.Chat> }>) => {
+      const { payload } = action
+      const { uuid, index, chat } = payload
+      if (!uuid || uuid === 0) {
+        if (state.chat.length) {
+          state.chat[0].data[index] = { ...state.chat[0].data[index], ...chat }
+        }
+        return
+      }
+
+      const chatIndex = state.chat.findIndex(item => item.uuid === uuid)
+      if (chatIndex !== -1) {
+        state.chat[chatIndex].data[index] = { ...state.chat[chatIndex].data[index], ...chat }
+      }
+    },
+    setActive: (state, action: PayloadAction<number>) => {
+      const { payload } = action
+      state.active = payload
+    },
   },
 })
 
-export const { addChatByUuid } = chatSlice.actions
+export {
+  useGetChatByUuidAndIndex,
+  useGetChatByUuid,
+  useGetChatHistory,
+  useGetChatActive,
+  useGetAllState,
+} from './hooks'
+
+export const { addChatByUuid, updateChatByUuid, updateChatSomeByUuid, setActive } = chatSlice.actions
 
 export const reducer = chatSlice.reducer

@@ -5,6 +5,7 @@ import { sendResponse } from '../utils'
 import { isNotEmptyString } from '../utils/is'
 import type { ApiModel, ChatContext, RequestProps } from '../types'
 import type { RequestOptions } from './types'
+import OPENAI_KEY from '../../../dev'
 
 const ErrorCodeMessage: Record<string, string> = {
   401: '[OpenAI] 提供错误的API密钥 | Incorrect API key provided',
@@ -19,14 +20,13 @@ const timeoutMs: number = process.env.TIMEOUT_MS ? +process.env.TIMEOUT_MS : 30 
 
 let apiModel: ApiModel
 
-const openaiKey = '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'
+const openaiKey = OPENAI_KEY
 process.env.OPENAI_API_KEY = openaiKey
 
 if (!isNotEmptyString(process.env.OPENAI_API_KEY) && !isNotEmptyString(process.env.OPENAI_ACCESS_TOKEN))
   throw new Error('Missing OPENAI_API_KEY or OPENAI_ACCESS_TOKEN environment variable')
 
 let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
-
 ;(async () => {
   if (isNotEmptyString(process.env.OPENAI_API_KEY)) {
     const OPENAI_API_BASE_URL = process.env.OPENAI_API_BASE_URL

@@ -9,7 +9,7 @@ import ConversitionList from '@/pages/components/conversition-list'
 import AvatarSetting from '@/pages/components/avatar-setting'
 import InputContainer from '@/pages/components/input-container'
 
-const { Header, Content, Sider } = Layout
+const { Content, Sider } = Layout
 
 const LayoutContainer: React.FC = () => {
   const dispatch = useAppDispatch()

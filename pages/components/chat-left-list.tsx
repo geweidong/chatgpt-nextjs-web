@@ -1,43 +1,28 @@
 import React, { memo, useCallback, useState } from 'react'
 import classnames from 'classnames'
-import { theme, Input } from 'antd'
+import { theme } from 'antd'
+import { useAppDispatch } from '../store/hooks'
 import { AliwangwangOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import styles from '@/styles/Layout.module.scss'
+import { useGetChatHistory, useGetChatActive, setActive, useGetAllState } from '@/pages/store/modules/chat'
 
 const ChatItemList = () => {
   const {
     token: { colorPrimaryTextActive, colorTextSecondary, colorBgLayout },
   } = theme.useToken()
-  const list = [
-    {
-      id: 1,
-      text: '说的分手发水电费舒服',
-    },
-    {
-      id: 2,
-      text: '水电费大量的劳动力',
-    },
-    {
-      id: 3,
-      text: 'll',
-    },
-    {
-      id: 4,
-      text: '都大大方方',
-    },
-    ...Array.from({ length: 10 }, (v, k) => k).map(item => {
-      return {
-        id: item + 5,
-        text: `第${item + 5}个`,
-      }
-    }),
-  ]
-  const [currentTab, setCurrentTab] = useState(list[0].id)
+  const dispatch = useAppDispatch()
+  const list = useGetChatHistory()
+  const active = useGetChatActive()
+  const allData = useGetAllState()
+  console.log(allData, '所有的state')
+
+  const [currentTab, setCurrentTab] = useState(active)
   const changeCurrentHistory = useCallback(
     (id: number) => {
       if (currentTab === id) return
       window.history.pushState({}, '', `?id=${id}`)
       setCurrentTab(id)
+      dispatch(setActive(id))
     },
     [currentTab],
   )
@@ -47,26 +32,26 @@ const ChatItemList = () => {
       {list.map(item => {
         return (
           <div
-            onClick={() => changeCurrentHistory(item.id)}
-            key={item.id}
+            onClick={() => changeCurrentHistory(item.uuid)}
+            key={item.uuid}
             className={classnames({
               [styles.historyItem]: true,
-              [styles.active]: currentTab === item.id,
-              boxShadowSecondary: currentTab === item.id,
+              [styles.active]: currentTab === item.uuid,
+              boxShadowSecondary: currentTab === item.uuid,
             })}
             style={{
-              color: currentTab === item.id ? colorPrimaryTextActive : colorTextSecondary,
-              borderColor: currentTab === item.id ? colorPrimaryTextActive : colorBgLayout,
+              color: currentTab === item.uuid ? colorPrimaryTextActive : colorTextSecondary,
+              borderColor: currentTab === item.uuid ? colorPrimaryTextActive : colorBgLayout,
             }}
           >
             <div className={styles.leftText}>
               <AliwangwangOutlined />
               <div className={styles.text}>
-                <span>{item.text}</span>
+                <span>{item.title}</span>
                 {/* <Input value={item.text} /> */}
               </div>
             </div>
-            {currentTab === item.id && (
+            {currentTab === item.uuid && (
               <div className={styles.rightIcons}>
                 <EditOutlined onClick={() => console.log(888)} />
                 <DeleteOutlined style={{ marginLeft: 6 }} />
