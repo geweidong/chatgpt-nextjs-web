@@ -1,0 +1,21 @@
+.siderContainer{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .addbtn{
+    width: 100%;
+    height: 50px;
+    background-color: red;
+  }
+  .siderBar{
+    width: 100%;
+    flex: 1;
+    overflow-y: scroll;
+    background-color: aqua;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import React from 'react'
 import Head from 'next/head'
-// import { Inter } from 'next/font/google'
+import Layout from './components/Layout'
+import { Provider } from 'react-redux'
+import { store } from './store'
 
 export default function Home() {
   return (
@@ -11,6 +13,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Provider store={store}>
+        <Layout />
+      </Provider>
     </>
   )
 }

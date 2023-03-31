@@ -1,0 +1,84 @@
+{
+  "uuid": 1680228339142,
+  "data": [
+      {
+          "dateTime": "2023/3/31 10:05:50",
+          "text": "列举三条情人节礼物",
+          "inversion": true,
+          "error": false,
+          "conversationOptions": null,
+          "requestOptions": {
+              "prompt": "列举三条情人节礼物",
+              "options": null
+          }
+      },
+      {
+          "dateTime": "2023/3/31 10:05:59",
+          "text": "1. 鲜花：鲜花是情人节最经典的礼物之一，可以表达对恋人的感激和爱意。常见的鲜花包括玫瑰、郁金香、百合等。\n\n2. 巧克力礼盒：巧克力被视为甜蜜和浪漫的象征，巧克力礼盒则是情人节最受欢迎的礼物之一。可以选择不同口味和品牌的巧克力礼盒，以满足不同偏好的恋人。\n\n3. 个性化礼品：个性化礼品可以定制恋人们的名字、照片或其他标识符，例如定制T恤、杯子、饰品等。这种礼品体现了对恋人的关注和独特性，通常会给人留下深刻的印象。",
+          "inversion": false,
+          "error": false,
+          "loading": false,
+          "messageId": "chatcmpl-6zyRDt9E9wOkBZOrPSH5X0UzrI35K",
+          "requestOptions": {
+              "prompt": "列举三条情人节礼物",
+              "options": {
+                  "parentMessageId": ""
+              }
+          }
+      },
+      {
+          "dateTime": "2023/3/31 10:28:04",
+          "text": "解释2",
+          "inversion": true,
+          "error": false,
+          "conversationOptions": null,
+          "requestOptions": {
+              "prompt": "解释2",
+              "options": null
+          }
+      },
+      {
+          "dateTime": "2023/3/31 10:28:13",
+          "text": "第二条情人节礼物是巧克力礼盒。在情人节这个浪漫的节日里，巧克力被认为是一种甜蜜而具有象征意义的礼品。巧克力因其甜美口感和对身体产生的内啡肽（一种让人感到快乐和放松的化学物质）效应而备受欢迎。巧克力礼盒是一种包装精美、内含多种口味或品牌巧克力的礼物，通常是情人节最受欢迎的礼物之一。通过挑选不同风味的巧克力礼盒，可以满足不同恋人的口味偏好，同时也展示出送礼者的关心和用心。",
+          "inversion": false,
+          "error": false,
+          "loading": false,
+          "conversationOptions": {
+              "parentMessageId": "chatcmpl-6zymjoVj2kOGpEFIl45l6hbPpxvg3"
+          },
+          "requestOptions": {
+              "prompt": "解释2",
+              "options": {
+                  "parentMessageId": "chatcmpl-6zyRDt9E9wOkBZOrPSH5X0UzrI35K"
+              }
+          }
+      },
+      {
+          "dateTime": "2023/3/31 10:41:53",
+          "text": "ddd",
+          "inversion": true,
+          "error": false,
+          "conversationOptions": null,
+          "requestOptions": {
+              "prompt": "ddd",
+              "options": null
+          }
+      },
+      {
+          "dateTime": "2023/3/31 10:41:55",
+          "text": "抱歉，我不理解您的问题。请您提出更具体的问题或内容，以便我能够为您提供更好的帮助。",
+          "inversion": false,
+          "error": false,
+          "loading": false,
+          "conversationOptions": {
+              "parentMessageId": "chatcmpl-6zz06hJad6aw65sKsTohKGnmWkj1B"
+          },
+          "requestOptions": {
+              "prompt": "ddd",
+              "options": {
+                  "parentMessageId": "chatcmpl-6zymjoVj2kOGpEFIl45l6hbPpxvg3"
+              }
+          }
+      }
+  ]
+}
