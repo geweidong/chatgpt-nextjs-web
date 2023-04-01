@@ -3,7 +3,7 @@ import { Layout, Button, theme, ConfigProvider } from 'antd'
 import styles from '@/styles/Layout.module.scss'
 import ChatItemList from './chat-left-list'
 import { useAppDispatch } from '../store/hooks'
-import { incrementByAmount } from '../store/counter'
+import { addHistory, setActive } from '../store/modules/chat'
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import ConversitionList from '@/pages/components/conversition-list'
 import AvatarSetting from '@/pages/components/avatar-setting'
@@ -19,7 +19,13 @@ const LayoutContainer: React.FC = () => {
   } = theme.useToken()
 
   const addChatItem = useCallback(() => {
-    dispatch(incrementByAmount(1))
+    const id = Date.now()
+    dispatch(
+      addHistory({
+        history: { title: 'New Chat', uuid: id, isEdit: false },
+      }),
+    )
+    setActive(id)
   }, [])
 
   return (
@@ -50,7 +56,7 @@ const LayoutContainer: React.FC = () => {
         >
           <div className={styles.siderContainer}>
             <div className={styles.addbtn}>
-              <Button type="dashed" block>
+              <Button type="dashed" block onClick={addChatItem}>
                 添加新的chats
               </Button>
             </div>

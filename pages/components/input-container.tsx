@@ -1,17 +1,17 @@
-import React, { memo, useCallback, useMemo, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { Input, theme, Button } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { fetchChatAPIProcess } from '@/pages/request'
 import styles from '@/styles/Layout.module.scss'
-import { useAppDispatch } from '../store/hooks'
-import { useRouter } from 'next/router'
+import { getDataFromUrl } from '@/pages/api/utils'
+import { useAppDispatch } from '@/pages/store/hooks'
 import {
   addChatByUuid,
   useGetChatByUuidAndIndex,
   useGetChatByUuid,
   updateChatByUuid,
   updateChatSomeByUuid,
-} from '../store/modules/chat'
+} from '@/pages/store/modules/chat'
 
 let controller = new AbortController()
 
@@ -24,38 +24,79 @@ const InputContainer = () => {
     token: { colorBgContainer },
   } = theme.useToken()
 
-  const router = useRouter()
-  const { id } = router.query
-  const uuid = id as unknown as number
+  const uuid = getDataFromUrl('id') || 0
 
-  const dataSources = useGetChatByUuid(uuid)
-  // const conversationList = useMemo(() => dataSources.filter(item => (!item.inversion && !item.error)), [dataSources]);
+  const dataSources = useGetChatByUuid(+uuid)
   const currentChat = useGetChatByUuidAndIndex(+uuid, dataSources.length - 1)
 
-  const fetchApi = useCallback(async (prompt: string) => {
+  const onprocess = useCallback(
+    async ({
+      text,
+      prompt,
+      messageId,
+      options,
+    }: {
+      text: string
+      prompt: string
+      messageId: string
+      options: Chat.ConversationRequest
+    }) => {
+      dispatch(
+        updateChatByUuid({
+          uuid: +uuid,
+          chat: {
+            dateTime: new Date().toLocaleString(),
+            text,
+            inversion: false,
+            error: false,
+            loading: false,
+            messageId: messageId,
+            requestOptions: { prompt, options: { ...options } },
+          },
+        }),
+      )
+    },
+    [dataSources.length],
+  )
+
+  const fetchApi = async (prompt: string) => {
     controller = new AbortController()
     setLoading(true)
     dispatch(
       addChatByUuid({
-        uuid,
+        uuid: +uuid,
         chat: {
           dateTime: new Date().toLocaleString(),
-          text: value,
+          text: prompt,
           inversion: true,
           error: false,
-          parentMessageId: undefined,
-          requestOptions: { prompt: value, options: null },
+          messageId: undefined,
+          requestOptions: { prompt, options: null },
         },
       }),
     )
 
     const options: Chat.ConversationRequest = {}
+    dispatch(
+      addChatByUuid({
+        uuid: +uuid,
+        chat: {
+          dateTime: new Date().toLocaleString(),
+          text: '',
+          inversion: false,
+          error: false,
+          loading: true,
+          messageId: undefined,
+          requestOptions: { prompt, options: { ...options } },
+        },
+      }),
+    )
 
     try {
       const lastText = ''
       const fetchChatAPIOnce = async () => {
         await fetchChatAPIProcess<Chat.ConversationResponse>({
-          prompt: value,
+          prompt,
           options,
           signal: controller.signal,
           onDownloadProgress: ({ event }) => {
@@ -66,24 +107,14 @@ const InputContainer = () => {
             if (lastIndex !== -1) chunk = responseText.substring(lastIndex)
             try {
               const data = JSON.parse(chunk)
-              dispatch(
-                updateChatByUuid({
-                  uuid: +uuid,
-                  index: dataSources.length - 1,
-                  chat: {
-                    dateTime: new Date().toLocaleString(),
-                    text: lastText + data.text ?? '',
-                    inversion: false,
-                    error: false,
-                    loading: false,
-                    parentMessageId: data.id,
-                    requestOptions: { prompt: value, options: { ...options } },
-                  },
-                }),
-              )
-            } catch (error) {
-              //
-            }
+
+              onprocess({
+                text: lastText + data.text ?? '',
+                prompt,
+                messageId: data.id,
+                options,
+              })
+            } catch (error) {}
           },
         })
       }
@@ -122,34 +153,36 @@ const InputContainer = () => {
       dispatch(
         updateChatByUuid({
           uuid: +uuid,
-          index: dataSources.length - 1,
           chat: {
             dateTime: new Date().toLocaleString(),
             text: errorMessage,
             inversion: false,
             error: true,
             loading: false,
-            parentMessageId: undefined,
-            requestOptions: { prompt: value, options: { ...options } },
+            messageId: undefined,
+            requestOptions: { prompt, options: { ...options } },
           },
         }),
       )
     } finally {
       setLoading(false)
     }
-  }, [])
+  }
 
   const onSubmit = useCallback(() => {
     fetchApi(value)
-  }, [value])
+  }, [fetchApi, value])
 
-  const onPressEnter = useCallback((_e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (loading) return
-    onSubmit()
-    setTimeout(() => {
-      setValue('')
-    }, 0)
-  }, [])
+  const onPressEnter = useCallback(
+    (_e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (loading) return
+      onSubmit()
+      setTimeout(() => {
+        setValue('')
+      }, 30)
+    },
+    [loading, onSubmit],
+  )
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value
@@ -163,7 +196,7 @@ const InputContainer = () => {
 
   return (
     <div className={styles.inputWrapper} style={{ backgroundColor: colorBgContainer }}>
-      <Input onChange={onChange} onPressEnter={onPressEnter} placeholder="请输入内容" />
+      <Input value={value} onChange={onChange} onPressEnter={onPressEnter} placeholder="请输入内容" />
       <Button onClick={onSubmit} disabled={disabled} type="primary" icon={<SearchOutlined />} style={{ marginLeft: 8 }}>
         提交
       </Button>

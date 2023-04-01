@@ -11,37 +11,41 @@ export const chatSlice = createSlice({
       const { payload } = action
       const { uuid, chat } = payload
       if (!uuid || uuid === 0) {
-        // 添加默认的新的chat
-        const newUuid = 1002
-        state.active = newUuid
-        state.history.push({ uuid: newUuid, title: 'New Chat', isEdit: false })
-        state.chat.push({ uuid: newUuid, data: [chat] })
-        return
+        if (state.history.length === 0) {
+          const newUuid = 1002
+          state.active = newUuid
+          state.history.push({ uuid: newUuid, title: 'New Chat', isEdit: false })
+          state.chat.push({ uuid: newUuid, data: [chat] })
+        } else {
+          state.chat[0].data.push(chat)
+        }
       }
       const chatIndex = state.chat.findIndex(item => item.uuid === uuid)
       if (chatIndex !== -1) {
         state.chat[chatIndex].data.push(chat)
       }
     },
-    addHistory: (state, action: PayloadAction<{ history: Chat.History; chatData: Chat.Chat[] }>) => {
+    addHistory: (state, action: PayloadAction<{ history: Chat.History; chat?: Chat.Chat[] }>) => {
       const { payload } = action
-      const { history, chatData } = payload
+      const { history, chat = [] } = payload
       state.history.unshift(history)
-      state.chat.unshift({ uuid: history.uuid, data: chatData })
+      state.chat.unshift({ uuid: history.uuid, data: chat })
       state.active = history.uuid
     },
-    updateChatByUuid: (state, action: PayloadAction<{ uuid: number; index: number; chat: Chat.Chat }>) => {
+    updateChatByUuid: (state, action: PayloadAction<{ uuid: number; chat: Chat.Chat }>) => {
       const { payload } = action
-      const { uuid, index, chat } = payload
+      const { uuid, chat } = payload
+
       if (!uuid || uuid === 0) {
-        if (state.chat.length) {
+        if (state.chat.length > 0) {
+          const index = state.chat[0].data.length - 1
           state.chat[0].data[index] = chat
         }
-        return
       }
 
       const chatIndex = state.chat.findIndex(item => item.uuid === uuid)
       if (chatIndex !== -1) {
+        const index = state.chat[chatIndex].data.length - 1
         state.chat[chatIndex].data[index] = chat
       }
     },
@@ -52,7 +56,6 @@ export const chatSlice = createSlice({
         if (state.chat.length) {
           state.chat[0].data[index] = { ...state.chat[0].data[index], ...chat }
         }
-        return
       }
 
       const chatIndex = state.chat.findIndex(item => item.uuid === uuid)
@@ -75,6 +78,6 @@ export {
   useGetAllState,
 } from './hooks'
 
-export const { addChatByUuid, updateChatByUuid, updateChatSomeByUuid, setActive } = chatSlice.actions
+export const { addChatByUuid, updateChatByUuid, updateChatSomeByUuid, setActive, addHistory } = chatSlice.actions
 
 export const reducer = chatSlice.reducer

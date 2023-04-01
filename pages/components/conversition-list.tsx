@@ -14,7 +14,7 @@ const ConversitionList = () => {
   return (
     <div className={styles.conversitionList} style={{ backgroundColor: colorBgContainer }}>
       {dataSources.map(item => {
-        return <Message key={item.dateTime} inversion={item.inversion ?? false} text={item.text} />
+        return <Message key={item.text} inversion={item.inversion ?? false} text={item.text} />
       })}
     </div>
   )

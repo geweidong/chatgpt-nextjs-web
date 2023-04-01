@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import classnames from 'classnames'
 import { theme } from 'antd'
 import { useAppDispatch } from '../store/hooks'
@@ -26,6 +26,10 @@ const ChatItemList = () => {
     },
     [currentTab],
   )
+
+  useEffect(() => {
+    setCurrentTab(active)
+  }, [active])
 
   return (
     <div>

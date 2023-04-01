@@ -3,6 +3,7 @@ import { useAppSelector } from '@/pages/store/hooks'
 
 export const useGetChatByUuidAndIndex = (uuid: number, index: number) => {
   const chatState: Chat.ChatState = useAppSelector(state => state.chat)
+  if (!uuid || uuid === 0) return chatState.chat[0].data[index]
   const chatIndex = chatState.chat.findIndex(item => item.uuid === uuid)
   if (chatIndex !== -1) {
     return chatState.chat[chatIndex].data[index]

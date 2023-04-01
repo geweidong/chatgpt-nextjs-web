@@ -1,3 +1,5 @@
+import queryString from 'query-string'
+
 interface SendResponseOptions<T = any> {
   type: 'Success' | 'Fail'
   message?: string
@@ -19,4 +21,9 @@ export function sendResponse<T>(options: SendResponseOptions<T>) {
     data: options.data ?? null,
     status: options.type,
   })
+}
+
+export const getDataFromUrl = (key: string) => {
+  const parsed = queryString.parse(location.search)
+  return parsed[key] || undefined
 }

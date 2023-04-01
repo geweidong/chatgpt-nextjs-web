@@ -5,7 +5,7 @@ declare namespace Chat {
     inversion?: boolean
     error?: boolean
     loading?: boolean
-    parentMessageId?: string
+    messageId?: string
     requestOptions: { prompt: string; options?: ConversationRequest | null }
   }
 
