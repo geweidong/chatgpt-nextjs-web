@@ -1,10 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
-import { reducer as counterReducer } from './counter'
 import { reducer as chatReducer } from './modules/chat'
 
 const rootReducer = combineReducers({
-  counter: counterReducer,
   chat: chatReducer,
 })
 

@@ -28,6 +28,7 @@ const InputContainer = () => {
 
   const dataSources = useGetChatByUuid(+uuid)
   const currentChat = useGetChatByUuidAndIndex(+uuid, dataSources.length - 1)
+  const conversitionList = dataSources.filter(item => !item.inversion && !item.error)
 
   const onprocess = useCallback(
     async ({
@@ -77,6 +78,11 @@ const InputContainer = () => {
     )
 
     const options: Chat.ConversationRequest = {}
+    if (conversitionList.length > 0) {
+      const parentMessageId = conversitionList[conversitionList.length - 1].messageId
+      if (parentMessageId) options.parentMessageId = parentMessageId
+    }
+
     dispatch(
       addChatByUuid({
         uuid: +uuid,
@@ -127,7 +133,6 @@ const InputContainer = () => {
         dispatch(
           updateChatSomeByUuid({
             uuid: +uuid,
-            index: dataSources.length - 1,
             chat: {
               loading: false,
             },
@@ -140,7 +145,6 @@ const InputContainer = () => {
         dispatch(
           updateChatSomeByUuid({
             uuid: +uuid,
-            index: dataSources.length - 1,
             chat: {
               text: `${currentChat.text}\n[${errorMessage}]`,
               error: false,
