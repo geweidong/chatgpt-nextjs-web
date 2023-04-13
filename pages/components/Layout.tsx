@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useState } from 'react'
 import { Layout, Button, theme, ConfigProvider } from 'antd'
-import styles from '@/styles/Layout.module.scss'
 import ChatItemList from './chat-left-list'
 import { useAppDispatch } from '../store/hooks'
 import { addHistory, setActive } from '../store/modules/chat'
@@ -54,13 +53,13 @@ const LayoutContainer: React.FC = () => {
             padding: '10px 8px',
           }}
         >
-          <div className={styles.siderContainer}>
-            <div className={styles.addbtn}>
+          <div className="flex relative flex-col w-full h-full justify-between">
+            <div className="w-full h-18 flex align-middle">
               <Button type="dashed" block onClick={addChatItem}>
                 添加新的chats
               </Button>
             </div>
-            <div className={styles.siderBar}>
+            <div className="flex-1 overflow-y-scroll w-full scrollbar-hide pt-2.5">
               <ChatItemList />
             </div>
           </div>
@@ -68,7 +67,7 @@ const LayoutContainer: React.FC = () => {
         </Sider>
         <Layout style={{ height: '100vh' }}>
           <Content style={{ margin: '10px 10px 0', overflow: 'initial', position: 'relative' }}>
-            <div className={styles.collapsedIcon}>
+            <div className="absolute top-1/2 left-0 -translate-y-1/2">
               {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
                 className: 'trigger',
                 onClick: () => setCollapsed(!collapsed),

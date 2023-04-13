@@ -51,7 +51,6 @@ export const chatSlice = createSlice({
           state.chat[0].data[index] = chat
         }
       }
-
       const chatIndex = state.chat.findIndex(item => item.uuid === uuid)
       if (chatIndex !== -1) {
         const index = state.chat[chatIndex].data.length - 1

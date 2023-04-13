@@ -3,7 +3,6 @@ import classnames from 'classnames'
 import { theme } from 'antd'
 import { useAppDispatch } from '../store/hooks'
 import { AliwangwangOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import styles from '@/styles/Layout.module.scss'
 import { useGetChatHistory, useGetChatActive, setActive, useGetAllState } from '@/pages/store/modules/chat'
 
 const ChatItemList = () => {
@@ -38,25 +37,23 @@ const ChatItemList = () => {
           <div
             onClick={() => changeCurrentHistory(item.uuid)}
             key={item.uuid}
-            className={classnames({
-              [styles.historyItem]: true,
-              [styles.active]: currentTab === item.uuid,
-              boxShadowSecondary: currentTab === item.uuid,
-            })}
+            className={`flex justify-between w-full h-10 mb-2 hover:bg-gray-100 items-center cursor-pointer px-2 border-slate-500 border border-solid ${
+              currentTab === item.uuid ? 'bg-gray-100' : 'bg-white'
+            }`}
             style={{
               color: currentTab === item.uuid ? colorPrimaryTextActive : colorTextSecondary,
               borderColor: currentTab === item.uuid ? colorPrimaryTextActive : colorBgLayout,
             }}
           >
-            <div className={styles.leftText}>
+            <div className="flex items-center">
               <AliwangwangOutlined />
-              <div className={styles.text}>
+              <div className="ml-1 h-23">
                 <span>{item.title}</span>
                 {/* <Input value={item.text} /> */}
               </div>
             </div>
             {currentTab === item.uuid && (
-              <div className={styles.rightIcons}>
+              <div className="flex items-center">
                 <EditOutlined onClick={() => console.log(888)} />
                 <DeleteOutlined style={{ marginLeft: 6 }} />
               </div>

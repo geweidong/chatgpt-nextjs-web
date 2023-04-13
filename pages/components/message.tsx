@@ -1,5 +1,4 @@
 import React, { useEffect, useState, memo } from 'react'
-import styles from '@/styles/Layout.module.scss'
 import Image from 'next/image'
 import { theme } from 'antd'
 import MarkdownIt from 'markdown-it'
@@ -29,9 +28,11 @@ mdi.use(mdKatex, { blockClass: '', errorColor: ' #cc0000' })
 const Message = ({
   text = "以下是一个简单的JavaScript代码示例，用于在页面上创建一个按钮，并在按钮上添加一个点击事件监听器：\n\n```js\nconst button = document.createElement('button');\nbutton.textContent = 'Click me';\n\nbutton.addEventListener('click', event => {\n  console.log('Button clicked!');\n});\n\ndocument.body.appendChild(button);\n```\n\n这段代码使用`document.createElement()`方法创建了一个新的`<button>`元素，并设置了其文本内容。然后，使用`addEventListener()`方法给按钮添加了一个点击事件监听器，并在点击时将一条消息记录到控制台中。最后，使用`document.body.appendChild()`方法将按钮添加到页面的主体中。\n\n当页面加载完毕后，运行这段代码就可以在页面上创建一个新的按钮，并在点击该按钮时将一条消息打印到控制台中。",
   inversion = false,
+  dateTime = '',
 }: {
   text: string
   inversion: boolean
+  dateTime: string
 }) => {
   const {
     token: { colorTextQuaternary, colorFillTertiary, colorInfoBgHover },
@@ -41,16 +42,20 @@ const Message = ({
     const value = text ?? ''
     setTextContent(mdi.render(value))
   }, [text])
+
   return (
-    <div className={styles.conversitionItem} style={{ flexDirection: inversion ? 'row-reverse' : 'row' }}>
-      <div className={styles.image} style={{ marginLeft: inversion ? 5 : 0, marginRight: inversion ? 0 : 5 }}>
+    <div className="mb-5 flex items-start" style={{ flexDirection: inversion ? 'row-reverse' : 'row' }}>
+      <div
+        className="w-10 h-10 overflow-hidden rounded-full"
+        style={{ marginLeft: inversion ? 5 : 0, marginRight: inversion ? 0 : 5 }}
+      >
         <Image src={inversion ? '/favicon.ico' : '/pwa-192x192.png'} width={40} height={40} alt="" />
       </div>
-      <div className={styles.conversition} style={{ marginLeft: 5 }}>
-        <div className={styles.time} style={{ color: colorTextQuaternary, textAlign: inversion ? 'right' : 'left' }}>
-          2023/3/31 19:50:51
+      <div className="flex flex-col ml-1.5">
+        <div className="mb-1 text-xs" style={{ color: colorTextQuaternary, textAlign: inversion ? 'right' : 'left' }}>
+          {dateTime}
         </div>
-        <div className={styles.content} style={{ backgroundColor: inversion ? colorInfoBgHover : colorFillTertiary }}>
+        <div className="p-1.5 rounded-sm" style={{ backgroundColor: inversion ? colorInfoBgHover : colorFillTertiary }}>
           <div>
             <div className="markdown-body" dangerouslySetInnerHTML={{ __html: textContent }} />
           </div>

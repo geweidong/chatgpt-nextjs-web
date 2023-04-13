@@ -1,8 +1,7 @@
 import React, { memo, useCallback, useState } from 'react'
 import { Input, theme, Button } from 'antd'
-import { SearchOutlined } from '@ant-design/icons'
+import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons'
 import { fetchChatAPIProcess } from '@/pages/request'
-import styles from '@/styles/Layout.module.scss'
 import { getDataFromUrl } from '@/pages/api/utils'
 import { useAppDispatch } from '@/pages/store/hooks'
 import {
@@ -198,10 +197,22 @@ const InputContainer = () => {
     }
   }, [])
 
+  const abortRequest = useCallback(() => {
+    controller.abort()
+  }, [])
+
   return (
-    <div className={styles.inputWrapper} style={{ backgroundColor: colorBgContainer }}>
+    <div
+      className="absolute bottom-0 left-0 w-full h-16 p-3 flex items-center"
+      style={{ backgroundColor: colorBgContainer }}
+    >
+      {loading && (
+        <Button onClick={abortRequest} icon={<CloseCircleOutlined />}>
+          取消
+        </Button>
+      )}
       <Input value={value} onChange={onChange} onPressEnter={onPressEnter} placeholder="请输入内容" />
-      <Button onClick={onSubmit} disabled={disabled} type="primary" icon={<SearchOutlined />} style={{ marginLeft: 8 }}>
+      <Button className="ml-2" onClick={onSubmit} disabled={disabled} type="primary" icon={<SearchOutlined />}>
         提交
       </Button>
     </div>

@@ -1,5 +1,4 @@
 import React, { memo } from 'react'
-import styles from '@/styles/Layout.module.scss'
 import { theme } from 'antd'
 import Message from '@/pages/components/message'
 import { useGetChatByUuid, useGetChatActive } from '@/pages/store/modules/chat'
@@ -12,9 +11,9 @@ const ConversitionList = () => {
   const dataSources = useGetChatByUuid(uuid || 0)
 
   return (
-    <div className={styles.conversitionList} style={{ backgroundColor: colorBgContainer }}>
+    <div className="p-2.5 h-full overflow-x-scroll rounded-sm pb-14" style={{ backgroundColor: colorBgContainer }}>
       {dataSources.map(item => {
-        return <Message key={item.text} inversion={item.inversion ?? false} text={item.text} />
+        return <Message key={item.text} inversion={item.inversion ?? false} text={item.text} dateTime={item.dateTime} />
       })}
     </div>
   )
